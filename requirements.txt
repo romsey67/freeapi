@@ -1,0 +1,15 @@
+asgiref==3.4.1
+click==8.0.1
+faspy==1.0.5
+fastapi==0.66.0
+h11==0.12.0
+llvmlite==0.36.0
+mpmath==1.2.1
+numba==0.53.1
+numpy==1.21.0
+pydantic==1.8.2
+scipy==1.7.0
+starlette==0.14.2
+sympy==1.8
+typing-extensions==3.10.0.0
+uvicorn==0.14.0
