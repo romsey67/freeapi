@@ -1,8 +1,9 @@
 import csv
 import codecs
+import json
 
 from io import StringIO
-from fastapi import FastAPI,  File, UploadFile
+from fastapi import FastAPI,  File, UploadFile, Form, Body
 from fastapi.encoders import jsonable_encoder
 from typing import Optional, List
 
@@ -71,6 +72,29 @@ async def calc_fixbond(bond:FixedRateBond):
     return {"result": val}
 
 
+@myfreeapi.post("/calc_dffromfiles/")
+async def uploadfiles(rate_set: UploadFile = File(...), 
+                    rates: UploadFile = File(...),
+                    holidays: Optional[UploadFile] = File(None)):
+
+    #Processing csv files
+    rateset = rateset_fromfile(rate_set.file)
+    ratesall =  rates_fromfile(rates.file)
+    #return ratesall
+    # calc_ts(ratesall, rateset, holidays=None)
+    discountfactors = calc_disountfactors(rateset, ratesall, 
+                        allholidays=None)
+    #holi = None
+    #postbond = None
+    #if holidays:
+    #    holi = holidays_fromfile(holidays.file)
+    #if pos_bond:
+    #    postbond = postbond_fromfile(pos_bond.file)
+    #    calc_bondstructures(postbond, holidays=holi)
+    
+    return discountfactors
+
+
 @myfreeapi.post("/uploadfiles/")
 async def uploadfiles(rate_set: UploadFile = File(...), 
                     rates: UploadFile = File(...),
@@ -91,8 +115,55 @@ async def uploadfiles(rate_set: UploadFile = File(...),
     if pos_bond:
         postbond = postbond_fromfile(pos_bond.file)
         calc_bondstructures(postbond, holidays=holi)
-
-    
-
     
     return ratesall
+
+
+@myfreeapi.get("/header_rate_set/")
+async def header_rate_set():
+    return {'header':['ccy', 'curvename', 'depo_ratebasis', 'depo_businessday',
+        'depo_daycount', 'lt_frequency', 'lt_businessday', 'lt_daycount', 
+        'lt_dategeneration']}
+
+
+@myfreeapi.get("/header_historical_rates/")
+async def header_historical_rates():
+    return {'header':['date', 'ccy', 'curvename', 'O/N','1W', '2W', '3W', '1M', 
+            '2M','3M', '4M', '5M', '6M', '12M', '1Y', '2Y', '3Y', '4Y', '5Y','7Y',
+            '10Y', '15Y', '20Y', '30Y']}
+
+
+@myfreeapi.get("/header_position_bonds/")
+async def header_position_bonds():
+    return {'header':['position_date', 'id', 'face_value', 'curvename','ccy', 
+            'issuer', 'issue_date', 'day_count', 'business_day','frequency', 
+            'coupon', 'maturity', 'date_generation_basis']}
+
+
+
+@myfreeapi.post("/convert_holidays/")
+async def convert_holidays(holidays: UploadFile = File(...)):
+    holi = holidays_fromfile(holidays.file)
+    return holi
+
+
+@myfreeapi.post("/convert_ratesetting/")
+async def convert_ratesetting(rate_set: UploadFile = File(...)):
+    rateset = rateset_fromfile(rate_set.file)
+    return rateset
+
+
+@myfreeapi.post("/convert_rates/")
+async def convert_rates(rates: UploadFile = File(...)):
+    ratesall =  rates_fromfile(rates.file)
+    return ratesall
+
+
+# TO DO
+@myfreeapi.post("/convert_rates2/")
+async def convert_rates2(rate_set: str = Body(...), rates: UploadFile = File(...)):
+    #ratesall =  rates_fromfile(rates.file)
+    data = json.loads(rate_set)
+    return data
+
+

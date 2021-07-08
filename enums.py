@@ -56,5 +56,4 @@ class LTTenors(str, Enum):
 class DateGeneration(str, Enum):
     forward = "Forward from issue date"
     backward = "Backward from maturity date"
-    act_act = "Actual/Actual"
 

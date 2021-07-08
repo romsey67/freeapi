@@ -8,7 +8,9 @@ mpmath==1.2.1
 numba==0.53.1
 numpy==1.21.0
 pydantic==1.8.2
+python-multipart==0.0.5
 scipy==1.7.0
+six==1.16.0
 starlette==0.14.2
 sympy==1.8
 typing-extensions==3.10.0.0
