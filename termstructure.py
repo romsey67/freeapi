@@ -105,7 +105,7 @@ class IRCurves(BaseModel):
 
 
 class AllIRCurves(BaseModel):
-    curves: List[Optional[IRCurves]] = []
+    allircurves: List[Optional[IRCurves]] = []
 
 
 class DiscountCurve(BaseModel):
@@ -125,7 +125,7 @@ class DiscountCurves(BaseModel):
     curves: List[Optional[HistoricalDiscountCurve]] = []
 
 class AllDiscountCurves(BaseModel):
-    curves: List[Optional[DiscountCurves]] = []
+    alldiscountcurves: List[Optional[DiscountCurves]] = []
 
 class CcyHolidays(BaseModel):
     ccy: str 

@@ -11,6 +11,7 @@ from termstructure import *
 from bonds import *
 import faspy.nbutils.nbcurves as nbc
 
+import numpy
 from numpy import datetime64 as dt64, datetime_as_string as datestr
 from conventions import *
 from helpers import *
@@ -84,15 +85,10 @@ async def uploadfiles(rate_set: UploadFile = File(...),
     # calc_ts(ratesall, rateset, holidays=None)
     discountfactors = calc_disountfactors(rateset, ratesall, 
                         allholidays=None)
-    #holi = None
-    #postbond = None
-    #if holidays:
-    #    holi = holidays_fromfile(holidays.file)
-    #if pos_bond:
-    #    postbond = postbond_fromfile(pos_bond.file)
-    #    calc_bondstructures(postbond, holidays=holi)
     
-    return discountfactors
+    return {'irsettings':rateset.irsettings, 
+            'allircurves': ratesall.allircurves, 
+            'alldiscountcurves': discountfactors.alldiscountcurves}
 
 
 @myfreeapi.post("/uploadfiles/")

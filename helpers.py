@@ -142,7 +142,7 @@ def rates_fromfile(thefile):
             
             ircurve.rates=curvebyname
             ircurves.curves.append(ircurve)
-        allircurves.curves.append(ircurves)
+        allircurves.allircurves.append(ircurves)
             
     return allircurves
 
@@ -259,7 +259,7 @@ def calc_disountfactors(ratesettings: AllRateSettings, allirrates: AllIRCurves,
     settings = settings['irsettings']
     alldiscountcurves = AllDiscountCurves()
     #return allirrates.curves
-    for curvesbyccy in allirrates.curves:
+    for curvesbyccy in allirrates.allircurves:
         ccy = curvesbyccy.ccy
         theccy = {'ccy': ccy}
         settsbyccy = list(filter(lambda x: x['ccy'] == ccy, settings))
@@ -305,14 +305,13 @@ def calc_disountfactors(ratesettings: AllRateSettings, allirrates: AllIRCurves,
                 for i in range(datecount):
                     df = dfs[i]
                     df['date'] = datestr(vdates[i])
-                    for x in range(len(df['days'])):
-                        df['days'][x] = int(df['days'][x])
-                        
-                return {'df': dfs}
-                    
+                    for x in range(len(df['times'])):
+                        df['times'][x] = float(df['times'][x])
+                
                 historicaldiscountcurve.curves = dfs
+                
             discountcurves.curves.append(historicaldiscountcurve)
-        alldiscountcurves.curves.append(discountcurves)
+        alldiscountcurves.alldiscountcurves.append(discountcurves)
     return alldiscountcurves
                     
                     
