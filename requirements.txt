@@ -1,6 +1,6 @@
 asgiref==3.4.1
 click==8.0.1
-faspy==1.0.5
+faspy==1.0.7
 fastapi==0.66.0
 h11==0.12.0
 llvmlite==0.36.0
